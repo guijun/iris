@@ -6,13 +6,14 @@ import (
 	"github.com/guijun/iris/context"
 
 	"github.com/gorilla/websocket"
+	"github.com/orcaman/concurrent-map"
 )
 
 type connectionKV struct {
 	key   string // the connection ID
 	value *connection
 }
-
+//TODO by Guijun. is connections functions fast enough? I don't think so.
 type connections []connectionKV
 
 func (cs *connections) add(key string, value *connection) {
@@ -105,7 +106,11 @@ type (
 	Server struct {
 		config                Config
 		connections           connections
-		rooms                 map[string][]string // by default a connection is joined to a room which has the connection id as its name
+//guijun disable		rooms                 map[string][]string // by default a connection is joined to a room which has the connection id as its name
+
+		//guijun Patch begin
+		rooms                 cmap.ConcurrentMap // by default a connection is joined to a room which has the connection id as its name
+		//guijun Patch end
 		mu                    sync.RWMutex        // for rooms
 		onConnectionListeners []ConnectionFunc
 		//connectionPool        sync.Pool // sadly we can't make this because the websocket connection is live until is closed.
@@ -122,7 +127,10 @@ func New(cfg Config) *Server {
 	cfg = cfg.Validate()
 	return &Server{
 		config: cfg,
-		rooms:  make(map[string][]string, 0),
+//guijun disable		rooms:   make(map[string][]string, 0),
+		//guijun Patch begin
+		rooms:   cmap.New(),
+		//guijun Patch end
 		onConnectionListeners: make([]ConnectionFunc, 0),
 		upgrader: websocket.Upgrader{
 			HandshakeTimeout:  cfg.HandshakeTimeout,
@@ -193,7 +201,7 @@ func (s *Server) Upgrade(ctx context.Context) Connection {
 // It does NOT starts its writer, reader and event mux, the caller is responsible for that.
 func (s *Server) handleConnection(ctx context.Context, websocketConn UnderlineConnection) *connection {
 	// use the config's id generator (or the default) to create a websocket client/connection id
-	cid := s.config.IDGenerator(ctx)
+	cid := s.config.IDGenerator(ctx)	//guijun we can change it to a better id
 	// create the new connection
 	c := newConnection(ctx, s, websocketConn, cid)
 	// add the connection to the Server's list
@@ -253,10 +261,24 @@ func (s *Server) Join(roomName string, connID string) {
 
 // join used internally, no locks used.
 func (s *Server) join(roomName string, connID string) {
+	//guijun Patch begin
+	if item,ok:=s.rooms.Get(roomName);!ok {
+		strs:=make([]string, 0);
+		strs = append(strs, connID)
+		s.rooms.Set(roomName,strs);
+	} else {
+		item = append(item.([]string), connID)
+		s.rooms.Set(roomName,item);
+	}
+	//guijun Patch end
+/*
+guijun disable begin
 	if s.rooms[roomName] == nil {
 		s.rooms[roomName] = make([]string, 0)
 	}
 	s.rooms[roomName] = append(s.rooms[roomName], connID)
+guijun disable end
+*/
 }
 
 // IsJoined reports if a specific room has a specific connection into its values.
@@ -264,6 +286,23 @@ func (s *Server) join(roomName string, connID string) {
 //
 // It returns true when the "connID" is joined to the "roomName".
 func (s *Server) IsJoined(roomName string, connID string) bool {
+	//guijun Patch begin
+	if item,ok:=s.rooms.Get(roomName);ok {
+		room:=item.([]string);
+		for _, connid := range room {
+			if connID == connid {
+				return true
+			}
+		}
+
+		return false
+
+	} else {
+		return false;
+	}
+	//guijun Patch end
+/*
+guijun disable begin
 	s.mu.RLock()
 	room := s.rooms[roomName]
 	s.mu.RUnlock()
@@ -279,15 +318,26 @@ func (s *Server) IsJoined(roomName string, connID string) bool {
 	}
 
 	return false
+guijun disable end
+*/
 }
 
 // LeaveAll kicks out a connection from ALL of its joined rooms
 func (s *Server) LeaveAll(connID string) {
+	//guijun Patch begin
+	for item:=range s.rooms.IterBuffered() {
+		s.leave(item.Key,connID);
+	}
+	//guijun Patch end
+/*
+guijun disable begin
 	s.mu.Lock()
 	for name := range s.rooms {
 		s.leave(name, connID)
 	}
 	s.mu.Unlock()
+guijun disable end
+*/
 }
 
 // Leave leaves a websocket client from a room,
@@ -304,21 +354,43 @@ func (s *Server) Leave(roomName string, connID string) bool {
 
 // leave used internally, no locks used.
 func (s *Server) leave(roomName string, connID string) (left bool) {
-	///THINK: we could add locks to its room but we still use the lock for the whole rooms or we can just do what we do with connections
-	// I will think about it on the next revision, so far we use the locks only for rooms so we are ok...
-	if s.rooms[roomName] != nil {
-		for i := range s.rooms[roomName] {
-			if s.rooms[roomName][i] == connID {
-				s.rooms[roomName] = append(s.rooms[roomName][:i], s.rooms[roomName][i+1:]...)
+//guijun Patch begin
+	if item,ok:=s.rooms.Get(roomName);ok {
+		room:=item.([]string);
+		for i := range room {
+			if room[i] == connID {
+				room = append(room[:i], room[i+1:]...)
 				left = true
 				break
 			}
 		}
-		if len(s.rooms[roomName]) == 0 { // if room is empty then delete it
-			delete(s.rooms, roomName)
+		if len(room) == 0 { // if room is empty then delete it
+			s.rooms.Remove(roomName)
+		} else {
+			s.rooms.Set(roomName,room)
 		}
 	}
+//guijun Patch end
 
+	/*
+	guijun disable begin
+		///THINK: we could add locks to its room but we still use the lock for the whole rooms or we can just do what we do with connections
+		// I will think about it on the next revision, so far we use the locks only for rooms so we are ok...
+
+		if s.rooms[roomName] != nil {
+			for i := range s.rooms[roomName] {
+				if s.rooms[roomName][i] == connID {
+					s.rooms[roomName] = append(s.rooms[roomName][:i], s.rooms[roomName][i+1:]...)
+					left = true
+					break
+				}
+			}
+			if len(s.rooms[roomName]) == 0 { // if room is empty then delete it
+				delete(s.rooms, roomName)
+			}
+		}
+	guijun disable end
+	*/
 	if left {
 		// fire the on room leave connection's listeners
 		s.connections.get(connID).fireOnLeave(roomName)
@@ -353,6 +425,17 @@ func (s *Server) GetConnection(key string) Connection {
 // GetConnectionsByRoom returns a list of Connection
 // which are joined to this room.
 func (s *Server) GetConnectionsByRoom(roomName string) []Connection {
+	//guijun Patch begin
+	var conns []Connection
+	if item,ok:=s.rooms.Get(roomName);ok {
+		connIDs:=item.([]string);
+		for _, connID := range connIDs {
+			conns = append(conns, s.connections.get(connID))
+		}
+	}
+	//guijun Patch end
+/*
+guijun disable begin
 	s.mu.Lock()
 	var conns []Connection
 	if connIDs, found := s.rooms[roomName]; found {
@@ -362,6 +445,8 @@ func (s *Server) GetConnectionsByRoom(roomName string) []Connection {
 
 	}
 	s.mu.Unlock()
+guijun disable end
+*/
 	return conns
 }
 
@@ -375,6 +460,42 @@ func (s *Server) GetConnectionsByRoom(roomName string) []Connection {
 // You SHOULD use connection.EmitMessage/Emit/To().Emit/EmitMessage instead.
 // let's keep it unexported for the best.
 func (s *Server) emitMessage(from, to string, data []byte) {
+	//guijun Patch begin
+	if to != All && to != Broadcast {
+		if item,ok:=s.rooms.Get(to);ok {
+			room_to:=item.([]string);
+			// it suppose to send the message to a specific room/or a user inside its own room
+			for _, connectionIDInsideRoom := range room_to {
+				if c := s.connections.get(connectionIDInsideRoom); c != nil {
+					c.writeDefault(data) //send the message to the client(s)
+				} else {
+					// the connection is not connected but it's inside the room, we remove it on disconnect but for ANY CASE:
+					cid := connectionIDInsideRoom
+					if c != nil {
+						cid = c.id
+					}
+					s.Leave(cid, to)
+				}
+			}
+		}
+	} else {
+		// it suppose to send the message to all opened connections or to all except the sender
+		for _, cKV := range s.connections {
+			connID := cKV.key
+			if to != All && to != connID { // if it's not suppose to send to all connections (including itself)
+				if to == Broadcast && from == connID { // if broadcast to other connections except this
+					continue //here we do the opossite of previous block,
+					// just skip this connection when it's suppose to send the message to all connections except the sender
+				}
+
+			}
+			// send to the client(s) when the top validators passed
+			cKV.value.writeDefault(data)
+		}
+	}
+	//guijun Patch end
+	/*
+	guijun disable begin
 	if to != All && to != Broadcast {
 		if s.rooms[to] != nil {
 			// it suppose to send the message to a specific room/or a user inside its own room
@@ -406,6 +527,8 @@ func (s *Server) emitMessage(from, to string, data []byte) {
 			cKV.value.writeDefault(data)
 		}
 	}
+	guijun disable end
+	*/
 }
 
 // Disconnect force-disconnects a websocket connection based on its connection.ID()
