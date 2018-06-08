@@ -3,8 +3,8 @@ package handlerconv
 import (
 	"net/http"
 
-	"github.com/kataras/iris/context"
-	"github.com/kataras/iris/core/errors"
+	"github.com/guijun/iris/context"
+	"github.com/guijun/iris/core/errors"
 )
 
 var errHandler = errors.New(`

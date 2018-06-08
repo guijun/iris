@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/kataras/iris/_examples/structuring/bootstrap/bootstrap"
-	"github.com/kataras/iris/_examples/structuring/bootstrap/middleware/identity"
-	"github.com/kataras/iris/_examples/structuring/bootstrap/routes"
+	"github.com/guijun/iris/_examples/structuring/bootstrap/bootstrap"
+	"github.com/guijun/iris/_examples/structuring/bootstrap/middleware/identity"
+	"github.com/guijun/iris/_examples/structuring/bootstrap/routes"
 )
 
 func newApp() *bootstrap.Bootstrapper {

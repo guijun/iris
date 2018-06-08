@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/mvc"
+	"github.com/guijun/iris"
+	"github.com/guijun/iris/mvc"
 )
 
 func main() {

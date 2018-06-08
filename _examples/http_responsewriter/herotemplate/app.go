@@ -3,9 +3,9 @@ package main
 import (
 	"bytes"
 
-	"github.com/kataras/iris/_examples/http_responsewriter/herotemplate/template"
+	"github.com/guijun/iris/_examples/http_responsewriter/herotemplate/template"
 
-	"github.com/kataras/iris"
+	"github.com/guijun/iris"
 )
 
 // $ go get -u github.com/shiyanhui/hero/hero

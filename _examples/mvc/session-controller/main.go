@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/mvc"
-	"github.com/kataras/iris/sessions"
+	"github.com/guijun/iris"
+	"github.com/guijun/iris/mvc"
+	"github.com/guijun/iris/sessions"
 )
 
 // VisitController handles the root route.

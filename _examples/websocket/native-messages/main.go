@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/kataras/iris"
+	"github.com/guijun/iris"
 
-	"github.com/kataras/iris/websocket"
+	"github.com/guijun/iris/websocket"
 )
 
 /* Native messages no need to import the iris-ws.js to the ./templates.client.html

@@ -8,7 +8,7 @@
 * OS: Microsoft **Windows** [Version **10**.0.15063], power plan is "High performance"
 * HTTP Benchmark Tool: https://github.com/codesenberg/bombardier, latest version **1.1**
 * **.NET Core**: https://www.microsoft.com/net/core, latest version **2.0**
-* **Iris**: https://github.com/kataras/iris, latest version **8.3** built with [go1.8.3](https://golang.org)
+* **Iris**: https://github.com/guijun/iris, latest version **8.3** built with [go1.8.3](https://golang.org)
 
 # .NET Core MVC vs Iris MVC
 
@@ -349,6 +349,6 @@ Node.js (Express) with Sessions Application ran for **15 minutes and 47 seconds*
 
 **Iris Go vs .NET Core Kestrel in terms of HTTP performance (Mo, 21 August 2017)** 
 
-- https://medium.com/@kataras/iris-go-vs-net-core-kestrel-in-terms-of-http-performance-806195dc93d5
+- https://medium.com/@guijun/iris-go-vs-net-core-kestrel-in-terms-of-http-performance-806195dc93d5
 
 **Thank you all** for the 100% green feedback, have fun!

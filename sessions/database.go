@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/kataras/iris/core/memstore"
+	"github.com/guijun/iris/core/memstore"
 )
 
 // Database is the interface which all session databases should implement

@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/kataras/iris"
+	"github.com/guijun/iris"
 )
 
 // GetFollowingHandler handles the GET: /following/{id}

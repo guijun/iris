@@ -6,9 +6,9 @@ Example:
 
 ```go
 import (
-    "github.com/kataras/iris/_examples/mvc/overview/datamodels"
+    "github.com/guijun/iris/_examples/mvc/overview/datamodels"
 
-    "github.com/kataras/iris/context"
+    "github.com/guijun/iris/context"
 )
 
 type Movie struct {
@@ -25,7 +25,7 @@ Iris is able to convert any custom data Structure into an HTTP Response Dispatch
 so theoretically, something like the following is permitted if it's really necessary;
 
 ```go
-// Dispatch completes the `kataras/iris/mvc#Result` interface.
+// Dispatch completes the `guijun/iris/mvc#Result` interface.
 // Sends a `Movie` as a controlled http response.
 // If its ID is zero or less then it returns a 404 not found error
 // else it returns its json representation,

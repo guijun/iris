@@ -2,11 +2,11 @@
 
 Source code and other details for the project are available at GitHub:
 
-   https://github.com/kataras/iris/tree/master/websocket
+   https://github.com/guijun/iris/tree/master/websocket
 
 Installation
 
-    $ go get -u github.com/kataras/iris/websocket
+    $ go get -u github.com/guijun/iris/websocket
 
 
 Example code:
@@ -17,10 +17,10 @@ Example code:
 	import (
 		"fmt"
 
-		"github.com/kataras/iris"
-		"github.com/kataras/iris/context"
+		"github.com/guijun/iris"
+		"github.com/guijun/iris/context"
 
-		"github.com/kataras/iris/websocket"
+		"github.com/guijun/iris/websocket"
 	)
 
 	func main() {

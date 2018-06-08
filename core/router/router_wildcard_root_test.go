@@ -9,9 +9,9 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/context"
-	"github.com/kataras/iris/httptest"
+	"github.com/guijun/iris"
+	"github.com/guijun/iris/context"
+	"github.com/guijun/iris/httptest"
 )
 
 const (

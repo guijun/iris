@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/context"
+	"github.com/guijun/iris"
+	"github.com/guijun/iris/context"
 )
 
 type (

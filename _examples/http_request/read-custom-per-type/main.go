@@ -3,7 +3,7 @@ package main
 import (
 	"gopkg.in/yaml.v2"
 
-	"github.com/kataras/iris"
+	"github.com/guijun/iris"
 )
 
 func main() {
@@ -35,7 +35,7 @@ type config struct {
 	ServerName string `yaml:"serverName"`
 }
 
-// Decode implements the `kataras/iris/context#BodyDecoder` optional interface
+// Decode implements the `guijun/iris/context#BodyDecoder` optional interface
 // that any go type can implement in order to be self-decoded when reading the request's body.
 func (c *config) Decode(body []byte) error {
 	return yaml.Unmarshal(body, c)

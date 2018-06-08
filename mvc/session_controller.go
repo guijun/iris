@@ -1,8 +1,8 @@
 package mvc
 
 import (
-	"github.com/kataras/iris/context"
-	"github.com/kataras/iris/sessions"
+	"github.com/guijun/iris/context"
+	"github.com/guijun/iris/sessions"
 )
 
 var defaultSessionManager = sessions.New(sessions.Config{})

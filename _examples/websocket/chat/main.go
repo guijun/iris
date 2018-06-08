@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/websocket"
+	"github.com/guijun/iris"
+	"github.com/guijun/iris/websocket"
 )
 
 func main() {

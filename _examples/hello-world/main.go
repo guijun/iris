@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/kataras/iris"
+	"github.com/guijun/iris"
 
-	"github.com/kataras/iris/middleware/logger"
-	"github.com/kataras/iris/middleware/recover"
+	"github.com/guijun/iris/middleware/logger"
+	"github.com/guijun/iris/middleware/recover"
 )
 
 func main() {

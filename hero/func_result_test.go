@@ -4,11 +4,11 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/context"
-	"github.com/kataras/iris/httptest"
+	"github.com/guijun/iris"
+	"github.com/guijun/iris/context"
+	"github.com/guijun/iris/httptest"
 
-	. "github.com/kataras/iris/hero"
+	. "github.com/guijun/iris/hero"
 )
 
 func GetText() string {

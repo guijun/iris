@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/kataras/iris"
+	"github.com/guijun/iris"
 
-	"github.com/kataras/iris/sessions"
+	"github.com/guijun/iris/sessions"
 )
 
 func main() {

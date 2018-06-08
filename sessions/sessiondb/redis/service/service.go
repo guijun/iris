@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/gomodule/redigo/redis"
-	"github.com/kataras/iris/core/errors"
+	"github.com/guijun/iris/core/errors"
 )
 
 var (

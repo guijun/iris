@@ -1,7 +1,7 @@
 package rule
 
 import (
-	"github.com/kataras/iris/context"
+	"github.com/guijun/iris/context"
 )
 
 type satisfiedRule struct{}

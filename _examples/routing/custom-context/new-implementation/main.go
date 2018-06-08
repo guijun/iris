@@ -3,8 +3,8 @@ package main
 import (
 	"sync"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/sessions"
+	"github.com/guijun/iris"
+	"github.com/guijun/iris/sessions"
 )
 
 // Owner is our application structure, it contains the methods or fields we need,

@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/sessions"
+	"github.com/guijun/iris"
+	"github.com/guijun/iris/sessions"
 
-	"github.com/kataras/iris/mvc"
+	"github.com/guijun/iris/mvc"
 )
 
 func main() {

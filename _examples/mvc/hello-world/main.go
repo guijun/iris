@@ -1,15 +1,15 @@
 package main
 
 import (
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/mvc"
+	"github.com/guijun/iris"
+	"github.com/guijun/iris/mvc"
 
-	"github.com/kataras/iris/middleware/logger"
-	"github.com/kataras/iris/middleware/recover"
+	"github.com/guijun/iris/middleware/logger"
+	"github.com/guijun/iris/middleware/recover"
 )
 
 // This example is equivalent to the
-// https://github.com/kataras/iris/blob/master/_examples/hello-world/main.go
+// https://github.com/guijun/iris/blob/master/_examples/hello-world/main.go
 //
 // It seems that additional code you
 // have to write doesn't worth it

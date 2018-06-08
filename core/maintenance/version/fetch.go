@@ -8,11 +8,11 @@ import (
 	"github.com/hashicorp/go-version"
 
 	"github.com/kataras/golog"
-	"github.com/kataras/iris/core/netutil"
+	"github.com/guijun/iris/core/netutil"
 )
 
 const (
-	versionURL = "https://raw.githubusercontent.com/kataras/iris/master/VERSION"
+	versionURL = "https://raw.githubusercontent.com/guijun/iris/master/VERSION"
 )
 
 func fetch() (*version.Version, string) {
@@ -43,7 +43,7 @@ func fetch() (*version.Version, string) {
 	)
 	// Example output:
 	// Version(8.5.5)
-	// 8.5.5:https://github.com/kataras/iris/blob/master/HISTORY.md#tu-02-november-2017--v855
+	// 8.5.5:https://github.com/guijun/iris/blob/master/HISTORY.md#tu-02-november-2017--v855
 	if idx := strings.IndexByte(fetchedVersion, ':'); idx > 0 {
 		changelogURL = fetchedVersion[idx+1:]
 		fetchedVersion = fetchedVersion[0:idx]
